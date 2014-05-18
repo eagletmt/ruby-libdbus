@@ -11,5 +11,5 @@ message = LibDBus::MethodCallMessage.new(
 )
 p [message.destination, message.path, message.interface, message.member]
 message.add_argument('s', 'org.freedesktop.systemd1.Unit')
-reply = conn.send_message(message)
+reply = conn.send_message_with_reply(message)
 pp reply.arguments

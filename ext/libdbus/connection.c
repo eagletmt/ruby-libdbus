@@ -51,7 +51,7 @@ s_system_bus(VALUE self)
 }
 
 static VALUE
-m_send_message(VALUE self, VALUE message)
+m_send_message_with_reply(VALUE self, VALUE message)
 {
   DBusError err = DBUS_ERROR_INIT;
   DBusMessage *reply = NULL;
@@ -76,5 +76,5 @@ Init_libdbus_connection(VALUE mLibDBus)
 
   rb_define_singleton_method(cConnection, "system_bus", s_system_bus, 0);
 
-  rb_define_method(cConnection, "send_message", m_send_message, 1);
+  rb_define_method(cConnection, "send_message_with_reply", m_send_message_with_reply, 1);
 }
