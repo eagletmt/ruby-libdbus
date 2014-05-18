@@ -66,6 +66,18 @@ s_session_bus(VALUE self)
 }
 
 static VALUE
+m_send_message(VALUE self, VALUE message)
+{
+  dbus_uint32_t serial = 0;
+
+  if (!dbus_connection_send(unwrap_connection(self), libdbus_unwrap_message(message), &serial)) {
+    rb_raise(rb_eRuntimeError, "Send message failure");
+  }
+
+  return UINT2NUM(serial);
+}
+
+static VALUE
 m_send_message_with_reply(VALUE self, VALUE message)
 {
   DBusError err = DBUS_ERROR_INIT;
@@ -92,5 +104,6 @@ Init_libdbus_connection(VALUE mLibDBus)
   rb_define_singleton_method(cConnection, "system_bus", s_system_bus, 0);
   rb_define_singleton_method(cConnection, "session_bus", s_session_bus, 0);
 
+  rb_define_method(cConnection, "send_message", m_send_message, 1);
   rb_define_method(cConnection, "send_message_with_reply", m_send_message_with_reply, 1);
 }
