@@ -94,6 +94,24 @@ m_send_message_with_reply(VALUE self, VALUE message)
   return libdbus_wrap_message(reply);
 }
 
+static VALUE
+m_request_name(VALUE self, VALUE name)
+{
+  DBusError err = DBUS_ERROR_INIT;
+  int result_code;
+
+  result_code = dbus_bus_request_name(
+      unwrap_connection(self),
+      StringValueCStr(name),
+      0,  // TODO: flags
+      &err);
+  if (result_code == -1) {
+    libdbus_raise_error(&err);
+  }
+
+  return INT2NUM(result_code);
+}
+
 void
 Init_libdbus_connection(VALUE mLibDBus)
 {
@@ -106,4 +124,5 @@ Init_libdbus_connection(VALUE mLibDBus)
 
   rb_define_method(cConnection, "send_message", m_send_message, 1);
   rb_define_method(cConnection, "send_message_with_reply", m_send_message_with_reply, 1);
+  rb_define_method(cConnection, "request_name", m_request_name, 1);
 }
