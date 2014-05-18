@@ -38,16 +38,31 @@ wrap_connection(VALUE obj, DBusConnection *conn)
 }
 
 static VALUE
-s_system_bus(VALUE self)
+get_bus(VALUE klass, DBusBusType type)
 {
   DBusError err = DBUS_ERROR_INIT;
-  DBusConnection *conn = dbus_bus_get(DBUS_BUS_SYSTEM, &err);
+  DBusConnection *conn;
+  VALUE obj;
+
+  conn = dbus_bus_get(type, &err);
   if (conn == NULL) {
     libdbus_raise_error(&err);
   }
-  VALUE obj = s_alloc(self);
+  obj = s_alloc(klass);
   wrap_connection(obj, conn);
   return obj;
+}
+
+static VALUE
+s_system_bus(VALUE self)
+{
+  return get_bus(self, DBUS_BUS_SYSTEM);
+}
+
+static VALUE
+s_session_bus(VALUE self)
+{
+  return get_bus(self, DBUS_BUS_SESSION);
 }
 
 static VALUE
@@ -75,6 +90,7 @@ Init_libdbus_connection(VALUE mLibDBus)
   rb_undef_method(CLASS_OF(cConnection), "new");
 
   rb_define_singleton_method(cConnection, "system_bus", s_system_bus, 0);
+  rb_define_singleton_method(cConnection, "session_bus", s_session_bus, 0);
 
   rb_define_method(cConnection, "send_message_with_reply", m_send_message_with_reply, 1);
 }
