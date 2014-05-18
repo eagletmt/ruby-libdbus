@@ -207,6 +207,16 @@ m_register_object_path(VALUE self, VALUE path)
   return Qnil;
 }
 
+static VALUE
+m_read_write_dispatch(VALUE self, VALUE timeout_milliseconds)
+{
+  // TODO: Make it interupttible
+  dbus_connection_read_write_dispatch(
+      unwrap_connection(self),
+      NUM2INT(timeout_milliseconds));
+  return Qnil;
+}
+
 void
 Init_libdbus_connection(VALUE mLibDBus)
 {
@@ -221,4 +231,5 @@ Init_libdbus_connection(VALUE mLibDBus)
   rb_define_method(cConnection, "send_message_with_reply", m_send_message_with_reply, 1);
   rb_define_method(cConnection, "request_name", m_request_name, 1);
   rb_define_method(cConnection, "register_object_path", m_register_object_path, 1);
+  rb_define_method(cConnection, "read_write_dispatch", m_read_write_dispatch, 1);
 }
