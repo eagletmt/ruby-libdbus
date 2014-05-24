@@ -172,6 +172,7 @@ on_message(DBusConnection *conn, DBusMessage *message, void *user_data)
     rb_raise(rb_eRuntimeError, "Connection mismatch (internal error)");
   }
   callback = get_callback(data->conn, data->path);
+  dbus_message_ref(message);
   ret = rb_funcall(callback, rb_intern("call"), 1, libdbus_wrap_message(message));
   if (RTEST(ret)) {
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
