@@ -92,6 +92,7 @@ m_send_message_with_reply(VALUE self, VALUE message)
   DBusError err = DBUS_ERROR_INIT;
   DBusMessage *reply = NULL;
 
+  // TODO: Make it interruptible
   reply = dbus_connection_send_with_reply_and_block(
       unwrap_connection(self),
       libdbus_unwrap_message(message),
