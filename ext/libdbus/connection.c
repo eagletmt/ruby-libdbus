@@ -223,6 +223,18 @@ m_read_write_dispatch(VALUE self, VALUE timeout_milliseconds)
   return Qnil;
 }
 
+static VALUE
+m_socket_fd(VALUE self)
+{
+  int fd;
+
+  if (dbus_connection_get_socket(unwrap_connection(self), &fd)) {
+    return INT2NUM(fd);
+  } else {
+    return Qnil;
+  }
+}
+
 void
 Init_libdbus_connection(VALUE mLibDBus)
 {
@@ -238,4 +250,5 @@ Init_libdbus_connection(VALUE mLibDBus)
   rb_define_method(cConnection, "request_name", m_request_name, 1);
   rb_define_method(cConnection, "register_object_path", m_register_object_path, 1);
   rb_define_method(cConnection, "read_write_dispatch", m_read_write_dispatch, 1);
+  rb_define_method(cConnection, "socket_fd", m_socket_fd, 0);
 }
