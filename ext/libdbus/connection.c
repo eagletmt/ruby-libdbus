@@ -216,7 +216,7 @@ m_register_object_path(VALUE self, VALUE path)
 static VALUE
 m_read_write_dispatch(VALUE self, VALUE timeout_milliseconds)
 {
-  // TODO: Make it interupttible
+  // TODO: Make it interruptible
   dbus_connection_read_write_dispatch(
       unwrap_connection(self),
       NUM2INT(timeout_milliseconds));
