@@ -15,7 +15,11 @@ get_boolean_argument(DBusMessageIter *iter)
 {
   dbus_bool_t val = 0;
   dbus_message_iter_get_basic(iter, &val);
-  return INT2FIX(val);
+  if (val) {
+    return Qtrue;
+  } else {
+    return Qfalse;
+  }
 }
 
 static VALUE
