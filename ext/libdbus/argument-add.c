@@ -117,6 +117,14 @@ libdbus_add_argument(DBusMessageIter *mes_iter, DBusSignatureIter *sig_iter, VAL
       case DBUS_TYPE_STRING:
         add_string_argument(mes_iter, StringValueCStr(argument));
         break;
+      case DBUS_TYPE_OBJECT_PATH:
+        libdbus_validate_path(Qnil, argument);
+        add_string_argument(mes_iter, StringValueCStr(argument));
+        break;
+      case DBUS_TYPE_SIGNATURE:
+        libdbus_validate_signature(Qnil, argument);
+        add_string_argument(mes_iter, StringValueCStr(argument));
+        break;
       case DBUS_TYPE_ARRAY:
         add_array_argument(mes_iter, sig_iter, argument);
         break;

@@ -7,6 +7,9 @@
 extern VALUE cMethodCallMessage;
 extern VALUE cMethodReturnMessage;
 
+VALUE libdbus_validate_path(VALUE self, VALUE path);
+VALUE libdbus_validate_signature(VALUE self, VALUE signature);
+
 void Init_libdbus_connection(VALUE mLibDBus);
 void Init_libdbus_error(VALUE mLibDBus);
 VALUE Init_libdbus_message(VALUE mLibDBus);
