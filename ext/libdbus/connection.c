@@ -162,17 +162,22 @@ on_unregister(DBusConnection *conn, void *user_data)
   xfree(data);
 }
 
-static void
+static DBusHandlerResult
 on_message(DBusConnection *conn, DBusMessage *message, void *user_data)
 {
   vtable_user_data_t *data = user_data;
-  VALUE callback;
+  VALUE callback, ret;
 
   if (unwrap_connection(data->conn) != conn) {
     rb_raise(rb_eRuntimeError, "Connection mismatch (internal error)");
   }
   callback = get_callback(data->conn, data->path);
-  rb_funcall(callback, rb_intern("call"), 1, libdbus_wrap_message(message));
+  ret = rb_funcall(callback, rb_intern("call"), 1, libdbus_wrap_message(message));
+  if (RTEST(ret)) {
+    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+  } else {
+    return DBUS_HANDLER_RESULT_HANDLED;
+  }
 }
 
 static VALUE

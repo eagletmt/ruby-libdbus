@@ -9,6 +9,7 @@ conn.register_object_path('/') do |message|
   puts "On /"
   reply = LibDBus::MethodReturnMessage.new(message)
   conn.send_message(reply)
+  true
 end
 
 loop do
